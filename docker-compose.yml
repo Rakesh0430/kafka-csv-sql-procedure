@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.2.1
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678@Lrs
+      MYSQL_DATABASE: employee_kafka_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  file-poller:
+    build: ./file_poller
+    volumes:
+      - ./data:/data
+    environment:
+      CSV_FILE_PATH: /data/employee_data.csv
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: employee-data
+    depends_on:
+      - kafka
+    entrypoint: ["sh", "-c", "sleep 40 && python file_poller.py"]  # Increased to 40 seconds
+
+  publisher:
+    build: ./publisher
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: employee-data
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: employee_kafka_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 12345678@Lrs
+    depends_on:
+      - kafka
+      - mysql
+    entrypoint: ["sh", "-c", "sleep 40 && python publisher.py"]  # Increased to 40 seconds
+
+volumes:
+  mysql_data:

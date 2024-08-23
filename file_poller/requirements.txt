@@ -1,0 +1,5 @@
+watchdog
+kafka-python
+backoff
+pandas
+mysql-connector

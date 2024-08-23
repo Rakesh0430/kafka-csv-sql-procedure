@@ -1,0 +1,3 @@
+2024-08-22 16:06:46,255 - INFO - CSV file 'employee_data_grouped.csv' created successfully.
+2024-08-22 16:06:46,269 - INFO - Data grouped by department from 'employee_data_grouped.csv'.
+2024-08-22 16:06:46,272 - INFO - XML file generated at: xml_gen_grouped\employee_data.xml (Size: 758 bytes)
