@@ -100,5 +100,37 @@ Key Considerations:
 Key considerations include error handling, data validation, logging, security, api authentication.   now update the full code incorporating everything mentioned in this prompt in the project without skipping anything in the project code.
 
 
+Running stored_procedure.py file
+
+\connect root@localhost
+\sql
+USE lodem;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_get_employees()
+BEGIN
+    SELECT 
+        1001 AS employee_id,
+        'John' AS first_name,
+        'Doe' AS last_name,
+        'john.doe@example.com' AS email,
+        'Engineering' AS department,
+        75000 AS salary,
+        '2020-01-15' AS hire_date
+    UNION
+    SELECT 
+        1002, 'Jane', 'Smith', 'jane.smith@example.com', 'HR', 65000, '2019-03-20';
+END$$
+
+DELIMITER ;
 
 
+SHOW PROCEDURE STATUS WHERE Db = 'lodem';
+CALL sp_get_employees();
+
+run the stored_procedure.py script
+
+Stored Procedure Execution: The Python script connected to the MySQL database and called the sp_get_employees stored procedure.
+Data Retrieval: The procedure returned the two rows of employee data, as defined in your procedure.
+REST API Request: The script sent each employee’s data to the mock REST API endpoint, confirming the successful sending of each entry.
