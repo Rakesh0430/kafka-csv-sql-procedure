@@ -134,3 +134,13 @@ run the stored_procedure.py script
 Stored Procedure Execution: The Python script connected to the MySQL database and called the sp_get_employees stored procedure.
 Data Retrieval: The procedure returned the two rows of employee data, as defined in your procedure.
 REST API Request: The script sent each employee’s data to the mock REST API endpoint, confirming the successful sending of each entry.
+
+
+
+
+deployment code how to run :
+
+chmod +x deploy.sh
+ bash deploy.sh      ## run these two commands in gitbash mode
+
+
